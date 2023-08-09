@@ -17,32 +17,32 @@ Hydra Environment Manager adalah alat baris perintah yang memungkinkan Anda meng
    cd hydra-env
    ```
 
-2. Bangun proyek:
+2. Install aplikasi:
 
    ```shell
-   go build -o hydra
+   go install ./cmd/hydra
    ```
 
 3. Jalankan aplikasi:
 
    ```shell
    # Generate encryption key
-   ./hydra --gen-key
+   hydra --gen-key
 
    # Create an environment file (if not set)
-   ./hydra --env=mycustomenv.json
+   hydra --env=mycustomenv.json
 
    # Add a new key-value pair to the environment file
-   ./hydra --env=mycustomenv.json --add-key="api_key|my_secret_key"
+   hydra --env=mycustomenv.json --add-key="api_key|my_secret_key"
 
    # Retrieve the value of a key from the environment file
-   ./hydra --env=mycustomenv.json --get-key=api_key
+   hydra --env=mycustomenv.json --get-key=api_key
 
    # List all keys in the environment file
-   ./hydra --env=mycustomenv.json --list-keys
+   hydra --env=mycustomenv.json --list-keys
 
    # Delete a key from the environment file
-   ./hydra --env=mycustomenv.json --del-key=api_key
+   hydra --env=mycustomenv.json --del-key=api_key
    ```
 
 ## Penggunaan
@@ -50,33 +50,35 @@ Hydra Environment Manager adalah alat baris perintah yang memungkinkan Anda meng
 - Untuk menghasilkan kunci enkripsi baru:
 
    ```shell
-   ./hydra --gen-key
+   hydra --gen-key
    ```
 
 - Untuk menambahkan pasangan kunci-nilai baru ke berkas lingkungan:
 
    ```shell
-   ./hydra --env=mycustomenv.json --add-key="api_key|my_secret_key"
+   hydra --env=mycustomenv.json --add-key="api_key|my_secret_key"
    ```
 
 - Untuk mendapatkan nilai dari kunci dalam berkas lingkungan:
 
    ```shell
-   ./hydra --env=mycustomenv.json --get-key=api_key
+   hydra --env=mycustomenv.json --get-key=api_key
    ```
 
 - Untuk menampilkan daftar semua kunci dalam berkas lingkungan:
 
    ```shell
-   ./hydra --env=mycustomenv.json --list-keys
+   hydra --env=mycustomenv.json --list-keys
    ```
 
 - Untuk menghapus kunci dari berkas lingkungan:
 
    ```shell
-   ./hydra --env=mycustomenv.json --del-key=api_key
+   hydra --env=mycustomenv.json --del-key=api_key
    ```
 
 ## Kontribusi
 
 Kontribusi sangat diterima! Jika Anda menemukan bug atau memiliki saran perbaikan, jangan ragu untuk membuka *issue* atau mengajukan *pull request*.
+
+....
