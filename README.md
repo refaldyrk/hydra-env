@@ -20,7 +20,7 @@ Hydra Environment Manager adalah alat baris perintah yang memungkinkan Anda meng
 2. Install aplikasi:
 
    ```shell
-   go install ./cmd/hydra
+   go install github.com/refaldyrk/hydra-env@latest
    ```
 
 3. Jalankan aplikasi:
