@@ -135,8 +135,17 @@ func main() {
 		dataString := string(data)
 		arrNewLine := strings.Split(dataString, "\n")
 		for _, v := range arrNewLine {
-			arrEnv := strings.Split(v, "=")
-			if v != "" {
+			if v == "" {
+				fmt.Println(v)
+			}
+			if v == "" || v == "\n" {
+				continue
+			}
+			if v != "" || v != "\n" {
+				arrEnv := strings.Split(v, "=")
+				if len(arrEnv) <= 1 {
+					continue
+				}
 				err := envis.AddKeyToFile(arrEnv[0], arrEnv[1])
 				if err != nil {
 					fmt.Println(err)

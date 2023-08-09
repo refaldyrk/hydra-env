@@ -35,6 +35,9 @@ Hydra Environment Manager adalah alat baris perintah yang memungkinkan Anda meng
    # List all keys in the environment file
    hydra-env --env=mycustomenv.json --list-keys
 
+   # Load all keys in the environment file
+   hydra-env --env=mycustomenv.json --load-env=example.env
+
    # Delete a key from the environment file
    hydra-env --env=mycustomenv.json --del-key=api_key
    ```
@@ -63,6 +66,12 @@ Hydra Environment Manager adalah alat baris perintah yang memungkinkan Anda meng
 
    ```shell
    hydra-env --env=mycustomenv.json --list-keys
+   ```
+
+- Untuk menambahkan daftar semua kunci dalam berkas lingkungan:
+
+   ```shell
+   hydra-env --env=mycustomenv.json --load-env=example.env
    ```
 
 - Untuk menghapus kunci dari berkas lingkungan:
