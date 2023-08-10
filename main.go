@@ -2,6 +2,8 @@ package main
 
 import (
 	"flag"
+	"fmt"
+	"os"
 
 	"github.com/refaldyrk/hydra-env/env"
 	"github.com/refaldyrk/hydra-env/key"
@@ -13,6 +15,8 @@ func main() {
 }
 
 func initFlag() {
+	//Get Environment HYDRA_MONGO_SERVER
+	mongoURL := os.Getenv("HYDRA_MONGO_SERVER")
 	key := key.DefaultKey()
 	envis := env.DefaultEnv()
 	presents := present.NewPresent(envis, key)
@@ -24,6 +28,9 @@ func initFlag() {
 	loadEnvFlag := flag.String("load-env", "", "Load environment variables from a file")
 	listKeysFlag := flag.Bool("list-keys", false, "List all keys in the environment file")
 	delKeyFlag := flag.String("del-key", "", "Delete a key by specifying the key name")
+
+	//Server Flag
+	serverFlag := flag.String("server", "", "run your server command, if u wanna see list command please send --server=help")
 
 	flag.Parse()
 
@@ -56,4 +63,11 @@ func initFlag() {
 		presents.LoadEnvFlag(*loadEnvFlag)
 	}
 
+	if *serverFlag != "" {
+		if mongoURL == "" {
+			fmt.Println("[HYDRA] Not Found Your HYDRA_MONGO_SERVER: Set Your Environment And Try Again")
+			return
+		}
+		presents.ServerFlag(*envFlag, *serverFlag, mongoURL)
+	}
 }

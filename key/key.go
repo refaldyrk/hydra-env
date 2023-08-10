@@ -1,7 +1,10 @@
 package key
 
 import (
+	"encoding/json"
 	"errors"
+	"io/ioutil"
+	"os"
 
 	"log"
 
@@ -12,6 +15,27 @@ import (
 type Key struct {
 	hc  *helper.HelperConfig
 	key string
+}
+
+func (k *Key) ReadJSON() (map[string]interface{}, error) {
+	file, err := os.Open("key.json")
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	data, err := ioutil.ReadAll(file)
+	if err != nil {
+		return nil, err
+	}
+
+	var jsonData map[string]interface{}
+	err = json.Unmarshal(data, &jsonData)
+	if err != nil {
+		return nil, err
+	}
+
+	return jsonData, nil
 }
 
 func DefaultKey() *Key {

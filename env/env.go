@@ -23,6 +23,11 @@ func (e *Env) SetHelperConfig(filePath string, hcc *helper.HelperConfig) {
 	e.hc = hcc
 }
 
+func (e *Env) GetHC() *helper.HelperConfig {
+	fmt.Println(e.hc)
+	return e.hc
+}
+
 func (e *Env) CreateKeyFile(data map[string]interface{}) error {
 	existingData, err := e.hc.ReadOrCreateJSON()
 	if err != nil {

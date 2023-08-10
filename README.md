@@ -1,87 +1,151 @@
+# Hydra-Env
 
-# Hydra Environment Manager
+Hydra-Env adalah alat baris perintah (command-line tool) untuk mengelola variabel lingkungan (environment variables) dan kunci (keys), serta memiliki kemampuan integrasi dengan MongoDB. Alat ini memungkinkan Anda dengan mudah membuat, mengelola, dan memuat variabel lingkungan dari berkas, menghasilkan dan menyimpan kunci dengan aman, serta berinteraksi dengan server MongoDB untuk penyimpanan data.
 
-Hydra Environment Manager adalah alat baris perintah yang memungkinkan Anda mengelola konfigurasi lingkungan secara aman menggunakan pasangan kunci-nilai yang dienkripsi. Alat ini memungkinkan Anda untuk membuat, mengubah, dan menghapus kunci sambil memastikan nilai-nilai dienkripsi, menjaga privasi data.
+## Instalasi
 
-## Fitur
+Untuk menginstal Hydra-Env, ikuti langkah-langkah berikut:
 
-- Menghasilkan dan mencetak kunci enkripsi yang aman.
-- Membuat, membaca, memperbarui, dan menghapus pasangan kunci-nilai dalam berkas lingkungan JSON.
-- Melakukan enkripsi dan dekripsi nilai untuk keamanan yang lebih baik.
 
-## Memulai
+1. Buat berkas biner eksekusi:
 
-1. Install aplikasi:
-
-   ```shell
+   ```bash
    go install github.com/refaldyrk/hydra-env@latest
    ```
 
-2. Jalankan aplikasi:
-
-   ```shell
-   # Generate encryption key
-   hydra-env --gen-key
-
-   # Create an environment file (if not set)
-   hydra-env --env=mycustomenv.json
-
-   # Add a new key-value pair to the environment file
-   hydra-env --env=mycustomenv.json --add-key="api_key|my_secret_key"
-
-   # Retrieve the value of a key from the environment file
-   hydra -env--env=mycustomenv.json --get-key=api_key
-
-   # List all keys in the environment file
-   hydra-env --env=mycustomenv.json --list-keys
-
-   # Load all keys in the environment file
-   hydra-env --env=mycustomenv.json --load-env=example.env
-
-   # Delete a key from the environment file
-   hydra-env --env=mycustomenv.json --del-key=api_key
-   ```
 
 ## Penggunaan
 
-- Untuk menghasilkan kunci enkripsi baru:
+Hydra-Env menyediakan serangkaian perintah untuk mengelola variabel lingkungan, kunci, dan berinteraksi dengan server MongoDB. Berikut adalah perintah-perintah yang tersedia:
 
-   ```shell
-   hydra-env --gen-key
-   ```
+### Menghasilkan dan Mencetak Kunci Baru
 
-- Untuk menambahkan pasangan kunci-nilai baru ke berkas lingkungan:
+Menghasilkan kunci baru dan mencetaknya ke konsol.
 
-   ```shell
-   hydra-env --env=mycustomenv.json --add-key="api_key|my_secret_key"
-   ```
+```bash
+hydra-env -gen-key
+```
 
-- Untuk mendapatkan nilai dari kunci dalam berkas lingkungan:
+### Menambahkan Kunci Baru
 
-   ```shell
-   hydra-env --env=mycustomenv.json --get-key=api_key
-   ```
+Menambahkan kunci baru ke berkas lingkungan.
 
-- Untuk menampilkan daftar semua kunci dalam berkas lingkungan:
+```bash
+hydra-env -env=path/ke/berkas/env -add-key=namaKunci|nilaiKunci
+```
 
-   ```shell
-   hydra-env --env=mycustomenv.json --list-keys
-   ```
+### Mendapatkan Nilai Kunci
 
-- Untuk menambahkan daftar semua kunci dalam berkas lingkungan:
+Mendapatkan nilai dari kunci tertentu dalam lingkungan.
 
-   ```shell
-   hydra-env --env=mycustomenv.json --load-env=example.env
-   ```
+```bash
+hydra-env -env=path/ke/berkas/env -get-key=namaKunci
+```
 
-- Untuk menghapus kunci dari berkas lingkungan:
+### Daftar Kunci
 
-   ```shell
-   hydra-env --env=mycustomenv.json --del-key=api_key
-   ```
+Menampilkan daftar semua kunci yang ada dalam berkas lingkungan.
 
-## Kontribusi
+```bash
+hydra-env -env=path/ke/berkas/env -list-keys
+```
 
-Kontribusi sangat diterima! Jika Anda menemukan bug atau memiliki saran perbaikan, jangan ragu untuk membuka *issue* atau mengajukan *pull request*.
+### Menghapus Kunci
 
-....
+Menghapus kunci tertentu dari lingkungan.
+
+```bash
+hydra-env -env=path/ke/berkas/env -del-key=namaKunci
+```
+
+### Memuat Lingkungan dari Berkas
+
+Memuat variabel lingkungan dari berkas dan menambahkannya ke lingkungan.
+
+```bash
+hydra-env -env=custom.json -load-env=path/ke/berkas/env
+```
+
+### Perintah Server
+
+Berinteraksi dengan server MongoDB menggunakan perintah-perintah berikut:
+
+- Pengecekan koneksi server:
+
+```bash
+hydra-env  -server=ping -env=path/ke/berkas/env
+```
+
+- Menampilkan bantuan perintah server:
+
+```bash
+hydra-env -server=help
+```
+
+## Konfigurasi
+
+Sebelum menggunakan Hydra-Env, pastikan Anda telah mengatur variabel lingkungan `HYDRA_MONGO_SERVER` untuk menentukan URL server MongoDB.
+
+```bash
+export HYDRA_MONGO_SERVER=mongodb://localhost:27017
+```
+
+## Contoh
+
+1. Menghasilkan dan mencetak kunci baru:
+
+```bash
+hydra-env -gen-key
+```
+
+2. Menambahkan kunci baru:
+
+```bash
+hydra-env -env=contoh.json -add-key=KUNCI_API|nilai-kunci-api-anda
+```
+
+3. Mendapatkan nilai kunci:
+
+```bash
+hydra-env -env=contoh.json -get-key=KUNCI_API
+```
+
+4. Menampilkan daftar kunci:
+
+```bash
+hydra-env -env=contoh.json -list-keys
+```
+
+5. Menghapus kunci:
+
+```bash
+hydra-env -env=contoh.json -del-key=KUNCI_API
+```
+
+6. Memuat lingkungan dari berkas:
+
+```bash
+hydra-env -load-env=berkas_env.env
+```
+
+7. Berinteraksi dengan server MongoDB - Pengecekan koneksi:
+
+```bash
+hydra-env -server=ping -env=contoh.json
+```
+
+8. Berinteraksi dengan server MongoDB - Mengimpor kunci dan data lingkungan:
+
+```bash
+hydra-env -server=import -env=contoh.json -serverURL=mongodb://localhost:27017
+```
+
+9. Menampilkan bantuan perintah server:
+
+```bash
+hydra-env -server=help
+```
+
+## Kontak
+
+Untuk pertanyaan, silakan hubungi [Email](mailto:refaldy.rizky22@gmail.com).
