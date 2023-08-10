@@ -15,6 +15,10 @@ func DefaultEnv() *Env {
 }
 
 func (e *Env) SetHelperConfig(filePath string, hcc *helper.HelperConfig) {
+	if hcc == nil {
+		fmt.Println("[HYDRA] Error When Set Helper Config: Myb You Key.JSON Doesn't Exists")
+		return
+	}
 	hcc.FilePath = filePath
 	e.hc = hcc
 }

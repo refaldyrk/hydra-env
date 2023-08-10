@@ -2,20 +2,20 @@ package main
 
 import (
 	"flag"
-	"fmt"
-	"io/ioutil"
-	"os"
-	"strings"
-
-	"log"
 
 	"github.com/refaldyrk/hydra-env/env"
 	"github.com/refaldyrk/hydra-env/key"
+	"github.com/refaldyrk/hydra-env/present"
 )
 
 func main() {
+	initFlag()
+}
+
+func initFlag() {
 	key := key.DefaultKey()
 	envis := env.DefaultEnv()
+	presents := present.NewPresent(envis, key)
 
 	genKeyFlag := flag.Bool("gen-key", false, "Generate and print a new key")
 	envFlag := flag.String("env", "", "Specify the environment file path")
@@ -28,132 +28,32 @@ func main() {
 	flag.Parse()
 
 	if *envFlag != "" {
-		envis.SetHelperConfig(*envFlag, key.GetHC())
-		err := envis.CreateKeyFile(map[string]interface{}{})
-		if err != nil {
-			log.Fatal("[HYDRA] Failed To Create Key File Env", err.Error())
-		}
+		presents.EnvFlagPresent(*envFlag)
 	}
 
 	if *genKeyFlag {
-		key.NewKey()
-
-		err := key.CreateKeyFile()
-		if err != nil {
-			log.Fatal("[HYDRA] Error Create Key File: ", err.Error())
-			return
-		}
-
-		err = key.PrintKey()
-		if err != nil {
-			log.Fatal("[HYDRA] Error Print Key", err)
-			return
-		}
-
+		presents.GenKeyFlag()
 		return
 	}
 
 	if *addKeyFlag != "" {
-		if *envFlag == "" {
-			log.Fatal("[HYDRA] Require flag --env")
-			return
-		}
-
-		parts := strings.Split(*addKeyFlag, "|")
-		if len(parts) != 2 {
-			log.Fatal("[HYDRA] Invalid Command For Add Key: ", addKeyFlag)
-			return
-		}
-
-		keys := parts[0]
-		value := parts[1]
-
-		err := envis.AddKeyToFile(keys, value)
-		if err != nil {
-			log.Fatal("[HYDRA] Error When Add Key: ", err)
-			return
-		}
-
-		log.Println("[HYDRA] Success Add Key: ", keys)
+		presents.AddKeyFlag(*envFlag, *addKeyFlag)
 	}
 
 	if *getKeyFlag != "" {
-		if *envFlag == "" {
-			log.Fatal("[HYDRA] Require flag --env")
-			return
-		}
-
-		value, err := envis.GetKey(*getKeyFlag)
-		if err != nil {
-			log.Fatal("[HYDRA] ERROR: ", err)
-		}
-
-		log.Printf("[HYDRA] Value of key '%s': %s\n", *getKeyFlag, value)
+		presents.GetKeyFlag(*envFlag, *getKeyFlag)
 	}
 
 	if *listKeysFlag {
-		if *envFlag == "" {
-			log.Fatal("[HYDRA] Require flag --env")
-			return
-		}
-
-		data, err := envis.GetExistingData()
-		if err != nil {
-			log.Fatal("[HYDRA] ERROR: ", err)
-		}
-
-		log.Println("[HYDRA] List of keys:")
-		for key := range data {
-			fmt.Println(key)
-		}
-		log.Println("[HYDRA] Key: ", len(data))
+		presents.ListKeyFlag(*envFlag)
 	}
 
 	if *delKeyFlag != "" {
-		if *envFlag == "" {
-			log.Fatal("[HYDRA] Require flag --env")
-			return
-		}
-
-		err := envis.DeleteKey(*delKeyFlag)
-		if err != nil {
-			log.Fatal("[HYDRA] ERROR: ", err)
-		}
-
-		log.Printf("Key '%s' deleted successfully.\n", *delKeyFlag)
+		presents.DelKeyFlag(*envFlag, *delKeyFlag)
 	}
 
 	if *loadEnvFlag != "" {
-		files, err := os.Open(*loadEnvFlag)
-		if err != nil {
-			log.Fatal("[HYDRA] ERROR: ", err)
-		}
-
-		defer files.Close()
-		data, err := ioutil.ReadAll(files)
-		if err != nil {
-			log.Fatal("[HYDRA] ERROR: ", err)
-		}
-		dataString := string(data)
-		arrNewLine := strings.Split(dataString, "\n")
-		for _, v := range arrNewLine {
-			if v == "" || v == "\n" {
-				continue
-			}
-			if v != "" || v != "\n" {
-				arrEnv := strings.Split(v, "=")
-				if len(arrEnv) <= 1 {
-					continue
-				}
-				err := envis.AddKeyToFile(arrEnv[0], arrEnv[1])
-				if err != nil {
-					log.Fatal("[HYDRA] ERROR: ", err)
-					continue
-				}
-				log.Println("[HYDRA] Add Key: ", arrEnv[0])
-			}
-		}
-		log.Println("[HYDRA] Success Load Env ", loadEnvFlag)
+		presents.LoadEnvFlag(*loadEnvFlag)
 	}
 
 }
