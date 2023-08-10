@@ -137,7 +137,7 @@ hydra-env -server=ping -env=contoh.json
 8. Berinteraksi dengan server MongoDB - Mengimpor kunci dan data lingkungan:
 
 ```bash
-hydra-env -server=import -env=contoh.json -serverURL=mongodb://localhost:27017
+hydra-env -server=import -env=contoh.json
 ```
 
 9. Menampilkan bantuan perintah server:
