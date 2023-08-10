@@ -2,7 +2,8 @@ package key
 
 import (
 	"errors"
-	"fmt"
+
+	"log"
 
 	"github.com/google/uuid"
 	"github.com/refaldyrk/hydra-env/helper"
@@ -21,7 +22,6 @@ func DefaultKey() *Key {
 func (k *Key) NewKey() {
 	k.key = uuid.NewString()
 	k.hc.Password = k.key
-	fmt.Println("[HYDRA] Key: ", k.hc.Password)
 }
 
 type KeyStruct struct {
@@ -73,6 +73,7 @@ func (k *Key) PrintKey() error {
 	var keyData KeyStruct
 	if keyVal, ok := fileData["key"].(string); ok {
 		keyData.Key = keyVal
+		log.Println("[HYDRA] New Key: ", keyVal)
 	} else {
 		return errors.New("key not found or invalid")
 	}
